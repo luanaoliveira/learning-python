@@ -63,5 +63,20 @@ while True:
         print(" ")
         print("""--------------------------""")
     elif opcao == "3":
-        print("extrato")
+        print("""-------- Extrato --------""")
+        if extrato:
+            print(extrato)
+        else:
+            print(" ")
+            print("Não foram realizadas moviementações.")
+
+        print(f"Saldo atual: R$ {saldo:.2f}")
+
+        print(" ")
+        print("""--------------------------""")
+    elif opcao == "4":
+        break
+    else:
+        print(" ")
+        print("Operação inválida, por favor selecione novamente a opção desejada.")
         
