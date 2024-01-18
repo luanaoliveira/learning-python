@@ -38,7 +38,30 @@ while True:
         print("""--------------------------""")
 
     elif opcao == "2":
-        print("saque")
+        print("""-------- Saque --------""")
+        print(" ")
+        print("Qual o valor do saque?")
+        saque = float(input())
+        if numero_saques < limite_saques:
+            if saque <= limite:
+                if saque <= saldo:
+                    print(" ")
+                    print("Saque realizado com sucesso!")
+                    saldo -= saque
+                    extrato += f"""Saque: R$ -{saque: .2f}\n"""
+                else: 
+                    print(" ")
+                    print("Não será possível sacar o dinheiro por falta de saldo.")
+            else:
+                print("Valor do saque excede o limite disponível para saque. Valor disponível parab saque di: R$ 500.00")
+        else:
+            print(" ")
+            print("Excedido a quantidade de saque. ")
+        numero_saques += 1
+        print(" ")
+        print(f"Saldo atual: R$ {saldo:.2f}")
+        print(" ")
+        print("""--------------------------""")
     elif opcao == "3":
         print("extrato")
         
