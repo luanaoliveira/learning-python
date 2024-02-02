@@ -15,6 +15,49 @@ extrato = " "
 numero_saques = 0
 limite_saques = 3
 
+def depositar(saldo, extrato, valor_deposito):
+    if valor_deposito > 0:
+        print(" ")
+        print("Depósito realizado com sucesso!")
+        saldo += valor_deposito
+        print(" ")
+        extrato += f"""Depósito: R$ {valor_deposito: .2f} \n"""
+    else:
+        print("Valor inválido!")
+    print(" ")
+    print(f"Saldo atual: R$ {saldo:.2f}")
+    return saldo, extrato
+    
+def sacar(*, saldo, extrato, limite, numero_saques, limite_saques, valor_saque):
+    if numero_saques < limite_saques:
+        if valor_saque <= limite:
+            if valor_saque <= saldo:
+                print(" ")
+                print("Saque realizado com sucesso!")
+                saldo -= valor_saque
+                extrato += f"""Saque: R$ -{valor_saque: .2f}\n"""
+            else: 
+                print(" ")
+                print("Não será possível sacar o dinheiro por falta de saldo.")
+        else:
+            print("Valor do saque excede o limite disponível. Valor disponível: R$ 500.00")
+    else:
+        print(" ")
+        print("Excedido a quantidade de saque. ")
+    numero_saques += 1
+    print(" ")
+    print(f"Saldo atual: R$ {saldo:.2f}")
+    return saldo, extrato
+
+def exibir_extrato(saldo, / , * , extrato):
+    if extrato:
+        print(extrato)
+    else:
+        print(" ")
+        print("Não foram realizadas movimentações.")
+    print(f"Saldo atual: R$ {saldo:.2f}")
+    return saldo, extrato
+
 while True:
 
     opcao = input(menu)
@@ -22,61 +65,29 @@ while True:
     if opcao == "1":
         print("""-------- Depósito --------""")
         print(" ")
-        print("Qual o valor do depósito?")
-        deposito = float(input())
-        if deposito > 0:
-           print(" ")
-           print("Depósito realizado com sucesso!")
-           saldo += deposito
-           print(" ")
-           extrato += f"""Depósito: R$ {deposito: .2f} \n"""
-        else:
-           print("Valor inválido!")
-        print(" ")
-        print(f"Saldo atual: R$ {saldo:.2f}")
+        valor_deposito = float(input("Digite o valor do depósito? "))
+        saldo, extrato = depositar(saldo, extrato, valor_deposito)
         print(" ")
         print("""--------------------------""")
+           
 
     elif opcao == "2":
         print("""-------- Saque --------""")
         print(" ")
-        print("Qual o valor do saque?")
-        saque = float(input())
-        if numero_saques < limite_saques:
-            if saque <= limite:
-                if saque <= saldo:
-                    print(" ")
-                    print("Saque realizado com sucesso!")
-                    saldo -= saque
-                    extrato += f"""Saque: R$ -{saque: .2f}\n"""
-                else: 
-                    print(" ")
-                    print("Não será possível sacar o dinheiro por falta de saldo.")
-            else:
-                print("Valor do saque excede o limite disponível para saque. Valor disponível parab saque di: R$ 500.00")
-        else:
-            print(" ")
-            print("Excedido a quantidade de saque. ")
-        numero_saques += 1
-        print(" ")
-        print(f"Saldo atual: R$ {saldo:.2f}")
+        valor_saque = float(input("Digite o valor do saque? "))
+        saldo, extrato = sacar(saldo=saldo, extrato=extrato, limite=limite, numero_saques=numero_saques, limite_saques=limite_saques, valor_saque=valor_saque)
         print(" ")
         print("""--------------------------""")
+    
+ 
     elif opcao == "3":
         print("""-------- Extrato --------""")
-        if extrato:
-            print(extrato)
-        else:
-            print(" ")
-            print("Não foram realizadas moviementações.")
-
-        print(f"Saldo atual: R$ {saldo:.2f}")
-
+        saldo, extrato = exibir_extrato(saldo, extrato=extrato)
         print(" ")
         print("""--------------------------""")
+        
     elif opcao == "4":
         break
     else:
         print(" ")
         print("Operação inválida, por favor selecione novamente a opção desejada.")
-        
