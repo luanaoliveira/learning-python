@@ -3,19 +3,23 @@ menu = """
 1 - Depositar
 2 - Sacar
 3 - Extrato
-4 - Sair
+4 - Cadastrar cliente
+5 - Nova conta
+6 - Listar contas
+7 - Logout
 
 """
 
-print(menu)
-
+AGENCIA = "0001"
 saldo = 0
 limite = 500
 extrato = " "
 numero_saques = 0
 limite_saques = 3
+usuarios = []
+contas = []
 
-def depositar(saldo, extrato, valor_deposito):
+def depositar(saldo, extrato, valor_deposito, /):
     if valor_deposito > 0:
         print(" ")
         print("Depósito realizado com sucesso!")
@@ -43,21 +47,60 @@ def sacar(*, saldo, extrato, limite, numero_saques, limite_saques, valor_saque):
             print("Valor do saque excede o limite disponível. Valor disponível: R$ 500.00")
     else:
         print(" ")
-        print("Excedido a quantidade de saque. ")
+        print("Excedido a quantidade de saque. " )
     numero_saques += 1
     print(" ")
     print(f"Saldo atual: R$ {saldo:.2f}")
     return saldo, extrato
 
 def exibir_extrato(saldo, / , * , extrato):
-    if extrato:
-        print(extrato)
+    if extrato == ' ':
+        print("Não foram realizadas movimentações.") 
     else:
-        print(" ")
-        print("Não foram realizadas movimentações.")
+        print(extrato)   
+      
     print(f"Saldo atual: R$ {saldo:.2f}")
-    return saldo, extrato
 
+def criar_usuario(usuarios):
+    nome = input("Digite seu nome completo: ")
+    data_de_nascimento = input("Digite sua data de nascimento no formato (dd-mm-aaaa): ")
+    cpf = input("Digite seu cpf com somente números: ")
+    endereco = input("Digite seu endereço no formato (logradouro, nro - bairro - cidade/sigla estado): ")
+    
+    usuario = filtrar_cpf(cpf, usuarios)
+
+    if usuario:
+        print("Usuário já existente!")
+        return
+    else:
+        usuarios.append({"nome":nome, "data_de_nascimento":data_de_nascimento, "cpf":cpf, "endereco":endereco})
+        print("Cadastro feito com sucesso!")
+
+def criar_contas(agencia, numero_da_conta, usuarios, contas):
+    cpf = input("Digite seu cpf: ")
+
+    usuario = filtrar_cpf(cpf, usuarios)
+
+    if usuario:
+        print("Conta criada com sucesso!")
+        contas.append({"agencia":agencia, "numero_da_conta":numero_da_conta, "usuario":usuario })
+        return contas
+    else:    
+        print("CPF não encontrado!")
+
+def filtrar_cpf(cpf, usuarios):
+    filtrar_cpf = []
+    for usuario in usuarios:
+        if usuario["cpf"] == cpf:
+            filtrar_cpf.append(usuario)
+    return filtrar_cpf[0] if filtrar_cpf else None
+
+def listar_contas(contas): 
+    for conta in contas:
+        print(f"Agência: {conta["agencia"]}")
+        print(f"Conta: {conta["numero_da_conta"]}")
+        print(f"Titular da conta: {conta["usuario"]["nome"]}")
+    
 while True:
 
     opcao = input(menu)
@@ -72,7 +115,7 @@ while True:
            
 
     elif opcao == "2":
-        print("""-------- Saque --------""")
+        print("""--------- Saque ----------""")
         print(" ")
         valor_saque = float(input("Digite o valor do saque? "))
         saldo, extrato = sacar(saldo=saldo, extrato=extrato, limite=limite, numero_saques=numero_saques, limite_saques=limite_saques, valor_saque=valor_saque)
@@ -81,13 +124,33 @@ while True:
     
  
     elif opcao == "3":
-        print("""-------- Extrato --------""")
-        saldo, extrato = exibir_extrato(saldo, extrato=extrato)
+        print("""-------- Extrato ---------""")
+        exibir_extrato(saldo, extrato=extrato)
+        print(" ")
+        print("""--------------------------""")  
+
+    elif opcao == "4":
+        print("""--- Cadastrar cliente ----""")
+        criar_usuario(usuarios)
         print(" ")
         print("""--------------------------""")
+
+    elif opcao == "5":
+        print("""------- Nova conta -------""")
+        numero_da_conta = len(contas) + 1
+        conta = criar_contas(AGENCIA, numero_da_conta, usuarios, contas)
+        print(" ")
+        print("""--------------------------""")  
+    
+    elif opcao == "6":
+        print("""----- Lista de contas ----""")
+        listar_contas(contas)
+        print(" ")
+        print("""--------------------------""") 
+
+    elif opcao == "7":
+        break 
         
-    elif opcao == "4":
-        break
     else:
         print(" ")
         print("Operação inválida, por favor selecione novamente a opção desejada.")
